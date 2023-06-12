@@ -14,22 +14,22 @@ public class VagaController {
     @Autowired
     VagaRepository repository;
 
-    @GetMapping("/vagas")
-    public List<Vaga> getAllCarros(){
+    @GetMapping("/vagas/")
+    public List<Vaga> getAllVagas(){
         return repository.findAll();
     }
 
-    @GetMapping("/vagas/{id}")
+    @GetMapping("/vagas/{id}/")
     public Optional<Vaga> getVagaById(@PathVariable long id){
         return repository.findById(id);
     }
 
-    @PostMapping("/vagas")
+    @PostMapping("/vagas/")
     public Vaga saveVaga(@RequestBody Vaga vaga){
         return repository.save(vaga);
     }
 
-    @PutMapping("/vagas/{id}")
+    @PutMapping("/vagas/{id}/")
     public Vaga updateVaga(@PathVariable long id, @RequestBody Vaga vaga){
         if(repository.findById(id).isPresent()){
             vaga.setId(id);
@@ -39,7 +39,7 @@ public class VagaController {
         return null;
     }
 
-    @DeleteMapping("/vagas/{id}")
+    @DeleteMapping("/vagas/{id}/")
     public String deleteVaga(@PathVariable long id){
         repository.deleteById(id);
         return "Vaga excluída com sucesso";
