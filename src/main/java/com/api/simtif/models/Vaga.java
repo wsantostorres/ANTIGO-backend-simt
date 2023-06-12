@@ -5,8 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.sql.Date;
-
 @Entity
 public class Vaga {
     @Id
@@ -18,12 +16,9 @@ public class Vaga {
     private int dispManha;
     private int dispTarde;
     private int dispNoite;
-    private Date dataPublicacao;
-    private Date dataEncerramento;
+    private String dataPublicacao;
+    private String dataEncerramento;
     private String urlImagem;
-    private int periodoInt;
-    private int periodoSub;
-    private int periodoSup;
     private int status;
 
     public long getId() {
@@ -82,19 +77,19 @@ public class Vaga {
         this.dispNoite = dispNoite;
     }
 
-    public Date getDataPublicacao() {
+    public String getDataPublicacao() {
         return dataPublicacao;
     }
 
-    public void setDataPublicacao(Date dataPublicacao) {
+    public void setDataPublicacao(String dataPublicacao) {
         this.dataPublicacao = dataPublicacao;
     }
 
-    public Date getDataEncerramento() {
+    public String getDataEncerramento() {
         return dataEncerramento;
     }
 
-    public void setDataEncerramento(Date dataEncerramento) {
+    public void setDataEncerramento(String dataEncerramento) {
         this.dataEncerramento = dataEncerramento;
     }
 
@@ -104,30 +99,6 @@ public class Vaga {
 
     public void setUrlImagem(String urlImagem) {
         this.urlImagem = urlImagem;
-    }
-
-    public int getPeriodoInt() {
-        return periodoInt;
-    }
-
-    public void setPeriodoInt(int periodoInt) {
-        this.periodoInt = periodoInt;
-    }
-
-    public int getPeriodoSub() {
-        return periodoSub;
-    }
-
-    public void setPeriodoSub(int periodoSub) {
-        this.periodoSub = periodoSub;
-    }
-
-    public int getPeriodoSup() {
-        return periodoSup;
-    }
-
-    public void setPeriodoSup(int periodoSup) {
-        this.periodoSup = periodoSup;
     }
 
     public int getStatus() {
