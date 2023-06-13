@@ -1,25 +1,37 @@
 package com.api.simtif.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Vaga {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column
     private String titulo;
+    @Column
     private String descricao;
+    @Column
     private int tipo;
+    @Column
     private int dispManha;
+    @Column
     private int dispTarde;
+    @Column
     private int dispNoite;
+    @Column
     private String dataPublicacao;
+    @Column
     private String dataEncerramento;
+    @Column
     private String urlImagem;
+    @Column
     private int status;
+
+    @ManyToMany(mappedBy = "vagas")
+    private List<Curso> cursos;
 
     public long getId() {
         return id;

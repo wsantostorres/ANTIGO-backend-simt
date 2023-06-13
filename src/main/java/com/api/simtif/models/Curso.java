@@ -1,9 +1,8 @@
 package com.api.simtif.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Curso {
@@ -11,7 +10,17 @@ public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable=false)
     private String nome;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "assignments",
+            joinColumns = @JoinColumn(name = "curso_id",
+                    referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "vaga_id",
+                    referencedColumnName = "id"))
+    private List<Vaga> vagas;
+
 
     public Long getId() {
         return id;
