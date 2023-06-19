@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Cursos")
+@Table(name = "cursos")
 public class Curso {
 
     @Id
@@ -15,13 +15,12 @@ public class Curso {
     private String nome;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "assignments",
+    @JoinTable(name = "vagas_cursos",
             joinColumns = @JoinColumn(name = "curso_id",
                     referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "vaga_id",
                     referencedColumnName = "id"))
     private List<Vaga> vagas;
-
 
     public Long getId() {
         return id;

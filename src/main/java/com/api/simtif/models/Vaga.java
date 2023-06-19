@@ -1,11 +1,12 @@
 package com.api.simtif.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "Vagas")
+@Table(name = "vagas")
 public class Vaga {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,8 +32,17 @@ public class Vaga {
     @Column
     private int status;
 
+    @ManyToOne
+    @JoinColumn(name = "administrador_id")
+    @JsonIgnore
+    private Administrador administrador;
+
     @ManyToMany(mappedBy = "vagas")
     private List<Curso> cursos;
+
+    public void setCursos(List<Curso> cursos) {
+        this.cursos = cursos;
+    }
 
     public long getId() {
         return id;
@@ -121,4 +131,5 @@ public class Vaga {
     public void setStatus(int status) {
         this.status = status;
     }
+
 }
