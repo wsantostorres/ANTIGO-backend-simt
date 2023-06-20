@@ -37,5 +37,13 @@ public class Curso {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public List<Vaga> getVagas() {
+        return vagas;
+    }
+
+    public void setVagas(List<Vaga> vagas) {
+        this.vagas = vagas;
+    }
 }
 

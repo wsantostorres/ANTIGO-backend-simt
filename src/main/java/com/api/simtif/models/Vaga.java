@@ -37,12 +37,21 @@ public class Vaga {
     @JsonIgnore
     private Administrador administrador;
 
-    @ManyToMany(mappedBy = "vagas")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "vagas_cursos",
+            joinColumns = @JoinColumn(name = "vaga_id",
+                    referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "curso_id",
+                    referencedColumnName = "id"))
     private List<Curso> cursos;
 
-    public void setCursos(List<Curso> cursos) {
-        this.cursos = cursos;
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "alunos_vaga",
+            joinColumns = @JoinColumn(name = "vaga_id",
+                    referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "aluno_id",
+                    referencedColumnName = "id"))
+    private List<Aluno> alunos;
 
     public long getId() {
         return id;
@@ -132,4 +141,11 @@ public class Vaga {
         this.status = status;
     }
 
+    public List<Curso> getCursos() {
+        return cursos;
+    }
+
+    public void setCursos(List<Curso> cursos) {
+        this.cursos = cursos;
+    }
 }

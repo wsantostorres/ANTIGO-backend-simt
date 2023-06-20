@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins = "*")
-@RepositoryRestResource(path = "alunos", collectionResourceRel = "alunos")
+@RepositoryRestResource(path = "cursos", collectionResourceRel = "cursos")
 public interface CursoRepository extends JpaRepository<Curso, Long> {
 
 }

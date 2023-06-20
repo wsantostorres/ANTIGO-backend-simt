@@ -2,6 +2,8 @@ package com.api.simtif.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "alunos")
 public class Aluno {
@@ -25,7 +27,15 @@ public class Aluno {
     private String projetos;
     private String educacao;
     private String habilidades;
-    private String cursosComplementeres;
+    private String cursosComplementares;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "alunos_vaga",
+            joinColumns = @JoinColumn(name = "aluno_id",
+                    referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "vaga_id",
+                    referencedColumnName = "id"))
+    private List<Vaga> vagas;
 
     public Long getId() {
         return id;
@@ -139,11 +149,11 @@ public class Aluno {
         this.habilidades = habilidades;
     }
 
-    public String getCursosComplementeres() {
-        return cursosComplementeres;
+    public String getCursosComplementares() {
+        return cursosComplementares;
     }
 
-    public void setCursosComplementeres(String cursosComplementeres) {
-        this.cursosComplementeres = cursosComplementeres;
+    public void setCursosComplementares(String cursosComplementares) {
+        this.cursosComplementares = cursosComplementares;
     }
 }
