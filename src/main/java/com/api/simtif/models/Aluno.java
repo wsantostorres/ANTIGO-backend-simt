@@ -30,7 +30,7 @@ public class Aluno {
     private String cursosComplementares;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "alunos_vaga",
+    @JoinTable(name = "alunos_vagas",
             joinColumns = @JoinColumn(name = "aluno_id",
                     referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "vaga_id",

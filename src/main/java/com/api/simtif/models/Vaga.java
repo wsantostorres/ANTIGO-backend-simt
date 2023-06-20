@@ -46,7 +46,7 @@ public class Vaga {
     private List<Curso> cursos;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "alunos_vaga",
+    @JoinTable(name = "alunos_vagas",
             joinColumns = @JoinColumn(name = "vaga_id",
                     referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "aluno_id",
