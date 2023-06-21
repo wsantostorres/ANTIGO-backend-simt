@@ -2,10 +2,13 @@ package com.api.simtif.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 @Entity
 @Table(name = "administradores")
+@Getter @Setter
 public class Administrador {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,36 +22,4 @@ public class Administrador {
     @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Vaga> vagas;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getNomeCompleto() {
-        return nomeCompleto;
-    }
-
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
-    }
-
-    public String getTipoVinculo() {
-        return tipoVinculo;
-    }
-
-    public void setTipoVinculo(String tipoVinculo) {
-        this.tipoVinculo = tipoVinculo;
-    }
 }
