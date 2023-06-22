@@ -23,6 +23,7 @@ public class Curso {
                     referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "vaga_id",
                     referencedColumnName = "id"))
+    @JsonIgnore
     private List<Vaga> vagas;
 }
 

@@ -33,20 +33,29 @@ public class VagaController {
     }
 
     @PostMapping("/vagas/")
-    public ResponseEntity<Vaga> saveVaga(@RequestBody Vaga vaga) {
-        List<Curso> cursos = new ArrayList<>();
-        for (Curso curso : vaga.getCursos()) {
-            Optional<Curso> cursoOptional = cursoRepository.findById(curso.getId());
-            if (cursoOptional.isPresent()) {
-                Curso existingCurso = cursoOptional.get();
-                existingCurso.getVagas().add(vaga);
-                cursos.add(existingCurso);
+    public Vaga saveVaga(@RequestBody Vaga vaga) {
+        List<Curso> cursos = cursoRepository.findAll();
+        List<Curso> vagaCursos = vaga.getCursos();
+
+        if (cursos.isEmpty()) {
+            return null;
+        }
+
+        List<Curso> cursosRelacionados = new ArrayList<>();
+
+        for (Curso curso : cursos) {
+            for (Curso vagaCurso : vagaCursos) {
+                if (vagaCurso.getId() == curso.getId()) {
+                    curso.getVagas().add(vaga);
+                    cursosRelacionados.add(curso);
+                }
             }
         }
-        vaga.setCursos(cursos);
 
+        vaga.setCursos(cursosRelacionados);
         Vaga savedVaga = vagaRepository.save(vaga);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedVaga);
+
+        return savedVaga;
     }
 
 
