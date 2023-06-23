@@ -33,12 +33,12 @@ public class VagaController {
     }
 
     @PostMapping("/vagas/")
-    public Vaga saveVaga(@RequestBody Vaga vaga) {
+    public ResponseEntity<Object> saveVaga(@RequestBody Vaga vaga) {
         List<Curso> cursos = cursoRepository.findAll();
         List<Curso> vagaCursos = vaga.getCursos();
 
         if (cursos.isEmpty()) {
-            return null;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ainda não há cursos.");
         }
 
         List<Curso> cursosRelacionados = new ArrayList<>();
@@ -53,25 +53,80 @@ public class VagaController {
         }
 
         vaga.setCursos(cursosRelacionados);
-        Vaga savedVaga = vagaRepository.save(vaga);
+        return ResponseEntity.status(HttpStatus.CREATED).body(vagaRepository.save(vaga));
 
-        return savedVaga;
     }
 
+    @PutMapping("/vagas/{id}")
+    public ResponseEntity<Object> updateVaga(@PathVariable Long id, @RequestBody Vaga vagaAtualizada) {
+    Optional<Vaga> optionalVaga = vagaRepository.findById(id);
 
-    @PutMapping("/vagas/{id}/")
-    public Vaga updateVaga(@PathVariable long id, @RequestBody Vaga vaga){
-        if(vagaRepository.findById(id).isPresent()){
-            vaga.setId(id);
-            return vagaRepository.save(vaga);
+    if (optionalVaga.isPresent()) {
+        Vaga vaga = optionalVaga.get();
+        List<Curso> cursosAntigos = vaga.getCursos();
+        List<Curso> cursosParaRemover = new ArrayList<>();
+
+        // Desvinculando cursos
+        for (Curso cursoAntigo : cursosAntigos) {
+            cursoAntigo.getVagas().remove(vaga);
+            cursosParaRemover.add(cursoAntigo);
         }
 
-        return null;
-    }
+        // Remover os cursos antigos da vaga
+        vaga.getCursos().removeAll(cursosParaRemover);
 
-    @DeleteMapping("/vagas/{id}/")
-    public String deleteVaga(@PathVariable long id){
-        vagaRepository.deleteById(id);
-        return "Vaga excluída com sucesso";
+        // Relacionando novos cursos
+        List<Curso> cursosRelacionados = new ArrayList<>();
+
+        List<Curso> cursos = cursoRepository.findAll();
+        List<Curso> vagaCursos = vagaAtualizada.getCursos();
+
+        for (Curso curso : cursos) {
+            for (Curso vagaCurso : vagaCursos) {
+                if (vagaCurso.getId() == curso.getId()) {
+                    curso.getVagas().add(vaga);
+                    cursosRelacionados.add(curso);
+                }
+            }
+        }
+
+        // Atualiza os cursos relacionados da vaga
+        vaga.setCursos(cursosRelacionados);
+
+        // Atualiza outras propriedades da vaga, se necessário
+        vaga.setTitulo(vagaAtualizada.getTitulo());
+        vaga.setTipo(vagaAtualizada.getTipo());
+        vaga.setDispManha(vagaAtualizada.getDispManha());
+        vaga.setDispTarde(vagaAtualizada.getDispTarde());
+        vaga.setDispNoite(vagaAtualizada.getDispNoite());
+        vaga.setDataPublicacao(vagaAtualizada.getDataPublicacao());
+        vaga.setDataEncerramento(vagaAtualizada.getDataEncerramento());
+        vaga.setUrlImagem(vagaAtualizada.getUrlImagem());
+        vaga.setStatus(vagaAtualizada.getStatus());
+
+        vagaRepository.save(vaga);
+        return ResponseEntity.status(HttpStatus.OK).body("Vaga atualizada com sucesso.");
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga não encontrada.");
+    }
+}
+
+    @DeleteMapping("/vagas/{id}")
+    public ResponseEntity<Object> deleteVaga(@PathVariable Long id) {
+        Optional<Vaga> optionalVaga = vagaRepository.findById(id);
+
+        if (optionalVaga.isPresent()) {
+            Vaga vaga = optionalVaga.get();
+            List<Curso> cursosRelacionados = vaga.getCursos();
+
+            for (Curso curso : cursosRelacionados) {
+                curso.getVagas().remove(vaga);
+            }
+
+            vagaRepository.delete(vaga);
+            return ResponseEntity.status(HttpStatus.OK).body("Vaga excluída com sucesso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga não encontrada.");
+        }
     }
 }
