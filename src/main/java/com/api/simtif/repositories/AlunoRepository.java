@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "*")
 @RepositoryRestResource(path = "aluno", collectionResourceRel = "aluno")
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
-
+    Aluno findByMatricula(String matricula);
 }
