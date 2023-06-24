@@ -30,7 +30,7 @@ public class UserController {
         Aluno aluno = alunoRepository.findByMatricula(matricula);
         if (aluno != null) {
             // Aluno encontrado
-            return ResponseEntity.status(HttpStatus.OK).body("Aluno encontrado");
+            return ResponseEntity.status(HttpStatus.OK).body(aluno.getId());
         }
         
         // Busca na entidade Admin
