@@ -31,8 +31,6 @@ public class Vaga {
     @Column
     private String dataEncerramento;
     @Column
-    private String urlImagem;
-    @Column
     private int status;
 
     @ManyToOne

@@ -37,7 +37,7 @@ public class UserController {
         Administrador admin = administradorRepository.findByMatricula(matricula);
         if (admin != null) {
             // Admin encontrado
-            return ResponseEntity.status(HttpStatus.OK).body("Admin encontrado");
+            return ResponseEntity.status(HttpStatus.OK).body(admin.getId());
         }
         
         // Nenhum usuário encontrado com a matrícula fornecida

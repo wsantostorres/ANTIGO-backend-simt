@@ -101,7 +101,6 @@ public class VagaController {
         vaga.setDispNoite(vagaAtualizada.getDispNoite());
         vaga.setDataPublicacao(vagaAtualizada.getDataPublicacao());
         vaga.setDataEncerramento(vagaAtualizada.getDataEncerramento());
-        vaga.setUrlImagem(vagaAtualizada.getUrlImagem());
         vaga.setStatus(vagaAtualizada.getStatus());
 
         vagaRepository.save(vaga);
