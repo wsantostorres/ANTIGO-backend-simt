@@ -128,4 +128,25 @@ public class VagaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga não encontrada.");
         }
     }
+
+
+    @GetMapping(value = "buscarTitulo")
+    @ResponseBody
+    public ResponseEntity<List<Vaga>> buscarTitulo(@RequestParam(name = "titulo") String titulo){
+        List<Vaga> vaga = vagaRepository.buscarTitulo(titulo.trim().toUpperCase());
+        return new ResponseEntity<List<Vaga>>(vaga, HttpStatus.OK);
+    }
+
+    
+    @GetMapping(value = "buscarStatus")
+    @ResponseBody
+    public ResponseEntity<List<Vaga>> buscarPorStatus(@RequestParam(name = "status") int status) {
+        List<Vaga> vagas;
+        if (status == 0 || status == 1) {
+            vagas = vagaRepository.buscarStatus(status);
+            return new ResponseEntity<>(vagas, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
