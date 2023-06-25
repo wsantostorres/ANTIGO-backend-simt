@@ -15,9 +15,9 @@ public class Vaga {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column
+    @Column(length = 100)
     private String titulo;
-    @Column
+    @Column(length = 1000)
     private String descricao;
     @Column
     private int tipo;
