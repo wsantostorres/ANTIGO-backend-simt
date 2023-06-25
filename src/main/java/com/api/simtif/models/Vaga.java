@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "vagas")
@@ -27,9 +28,9 @@ public class Vaga {
     @Column
     private int dispNoite;
     @Column
-    private String dataPublicacao;
+    private LocalDate dataPublicacao;
     @Column
-    private String dataEncerramento;
+    private LocalDate dataEncerramento;
     @Column
     private int status;
 
