@@ -18,6 +18,8 @@ public class Curso {
     private Long id;
     @Column(nullable=false)
     private String nome;
+    @Column(nullable=false)
+    private String categoria;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "vagas_cursos",
