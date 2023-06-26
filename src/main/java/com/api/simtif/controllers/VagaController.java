@@ -95,6 +95,7 @@ public class VagaController {
 
         // Atualiza outras propriedades da vaga, se necessário
         vaga.setTitulo(vagaAtualizada.getTitulo());
+        vaga.setDescricao(vagaAtualizada.getDescricao());
         vaga.setTipo(vagaAtualizada.getTipo());
         vaga.setDispManha(vagaAtualizada.getDispManha());
         vaga.setDispTarde(vagaAtualizada.getDispTarde());
