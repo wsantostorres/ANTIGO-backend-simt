@@ -34,11 +34,6 @@ public class Vaga {
     @Column
     private int status;
 
-    @ManyToOne
-    @JoinColumn(name = "administrador_id")
-    @JsonIgnore
-    private Administrador administrador;
-
     @ManyToMany(mappedBy = "vagas")
     private List<Curso> cursos;
 
