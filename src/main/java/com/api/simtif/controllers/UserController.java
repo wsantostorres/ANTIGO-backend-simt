@@ -30,19 +30,18 @@ public class UserController {
         Aluno aluno = alunoRepository.findByMatricula(matricula);
         if (aluno != null) {
             // Aluno encontrado
-            return ResponseEntity.status(HttpStatus.OK).body(aluno.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(aluno);
         }
         
         // Busca na entidade Admin
         Administrador admin = administradorRepository.findByMatricula(matricula);
         if (admin != null) {
             // Admin encontrado
-            return ResponseEntity.status(HttpStatus.OK).body(admin.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(admin);
         }
         
         // Nenhum usuário encontrado com a matrícula fornecida
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
     }
-    
 
 }
