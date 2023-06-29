@@ -1,10 +1,13 @@
 package com.api.simtif.controllers;
 
+import com.api.simtif.models.Aluno;
 import com.api.simtif.models.Curso;
 import com.api.simtif.models.Vaga;
+import com.api.simtif.repositories.AlunoRepository;
 import com.api.simtif.repositories.CursoRepository;
 import com.api.simtif.repositories.VagaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +25,13 @@ public class VagaController {
     @Autowired
     CursoRepository cursoRepository;
 
+    @Autowired
+    AlunoRepository alunoRepository;
+
     @GetMapping("/vagas/")
     public List<Vaga> getAllVagas(){
-        return vagaRepository.findAll();
+        Sort sortByDataPublicacao = Sort.by(Sort.Direction.DESC, "dataPublicacao");
+        return vagaRepository.findAll(sortByDataPublicacao);
     }
 
     @GetMapping("/vagas/{id}/")
@@ -123,11 +130,38 @@ public class VagaController {
                 curso.getVagas().remove(vaga);
             }
 
+            List<Aluno> alunosRelacionados = vaga.getAlunos();
+            for (Aluno aluno : alunosRelacionados) {
+                aluno.getVagas().remove(vaga);
+            }
+
             vagaRepository.delete(vaga);
             return ResponseEntity.status(HttpStatus.OK).body("Vaga excluída com sucesso.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga não encontrada.");
         }
+    }
+
+    @PutMapping("/participar/{alunoId}/{vagaId}/")
+    public ResponseEntity<Object> participarVaga(@PathVariable Long alunoId, @PathVariable Long vagaId) {
+        
+        Optional<Aluno> alunoOptional = alunoRepository.findById(alunoId);
+        Optional<Vaga> vagaOptional = vagaRepository.findById(vagaId);
+
+        if(alunoOptional.isPresent() && vagaOptional.isPresent()){
+            Aluno aluno = alunoOptional.get();
+            Vaga vaga = vagaOptional.get();
+
+            aluno.getVagas().add(vaga);
+            vaga.getAlunos().add(aluno);
+
+            alunoRepository.save(aluno);
+            vagaRepository.save(vaga);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Participação realizada com sucesso.");
+        }
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocorreu um erro.");
     }
 
 

@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Getter @Setter
 public class Aluno {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable=false)
     private String matricula;

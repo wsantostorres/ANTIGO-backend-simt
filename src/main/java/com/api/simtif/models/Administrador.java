@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter @Setter
 public class Administrador {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable=false)
     private String matricula;
