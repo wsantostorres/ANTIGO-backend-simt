@@ -30,28 +30,12 @@ public class UserController {
     @Autowired
     AdministradorRepository administradorRepository;
 
-    @GetMapping(value="/user/{matricula}/")
-    public ResponseEntity<Object> getByMatricula(@PathVariable String matricula) {
-        Aluno aluno = alunoRepository.findByMatricula(matricula);
-        if (aluno != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(aluno);
-        }
-        
-        Administrador admin = administradorRepository.findByMatricula(matricula);
-        if (admin != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(admin);
-        }
-        
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
-    }
-
     @GetMapping(value="/user/dados/{token}/")
     public ResponseEntity<Object> getDataByToken(@PathVariable String token) {
         String[] chunks = token.split("\\.");
 
         Base64.Decoder decoder = Base64.getUrlDecoder();
 
-        String header = new String(decoder.decode(chunks[0]));
         String payload = new String(decoder.decode(chunks[1]));
         String tokenPayload = payload;
 

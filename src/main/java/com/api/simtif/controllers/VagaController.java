@@ -34,6 +34,7 @@ public class VagaController {
         return vagaRepository.findAll(sortByDataPublicacao);
     }
 
+
     @GetMapping("/vagas/{id}/")
     public Optional<Vaga> getVagaById(@PathVariable long id){
         return vagaRepository.findById(id);
@@ -152,6 +153,10 @@ public class VagaController {
             Aluno aluno = alunoOptional.get();
             Vaga vaga = vagaOptional.get();
 
+            if(vaga.getAlunos().contains(aluno)){
+                return ResponseEntity.status(HttpStatus.OK).body("Você já está participando desta vaga");
+            }
+            
             aluno.getVagas().add(vaga);
             vaga.getAlunos().add(aluno);
 
