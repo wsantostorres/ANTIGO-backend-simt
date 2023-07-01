@@ -29,9 +29,27 @@ public class VagaController {
     AlunoRepository alunoRepository;
 
     @GetMapping("/vagas/")
-    public List<Vaga> getAllVagas(){
+    public List<Vaga> getAllVagas(@RequestParam(required = false) String cursoNome){
+        // if curso Contains in getCursos.
         Sort sortByDataPublicacao = Sort.by(Sort.Direction.DESC, "dataPublicacao");
-        return vagaRepository.findAll(sortByDataPublicacao);
+        List <Vaga> vagas = vagaRepository.findAll(sortByDataPublicacao);;
+        
+
+        if(cursoNome != null && !cursoNome.isEmpty()){
+            Curso curso = cursoRepository.findByNome(cursoNome);
+            List<Vaga> vagasDestinadas = new ArrayList<>();
+
+            for(Vaga vaga : vagas){
+                if(vaga.getCursos().contains(curso)){
+                    vagasDestinadas.add(vaga);
+                }
+            }
+
+            return vagasDestinadas;
+        }
+
+
+        return vagas;
     }
 
 
@@ -172,9 +190,23 @@ public class VagaController {
 
     @GetMapping(value = "buscarTitulo")
     @ResponseBody
-    public ResponseEntity<List<Vaga>> buscarTitulo(@RequestParam(name = "titulo") String titulo){
-        List<Vaga> vaga = vagaRepository.buscarTitulo(titulo.trim().toUpperCase());
-        return new ResponseEntity<List<Vaga>>(vaga, HttpStatus.OK);
+    public ResponseEntity<List<Vaga>> buscarTitulo(@RequestParam(name = "titulo") String titulo, @RequestParam(required = false) String cursoNome){
+        List<Vaga> vagas = vagaRepository.buscarTitulo(titulo.trim().toUpperCase());
+
+        if(cursoNome != null && !cursoNome.isEmpty()){
+            Curso curso = cursoRepository.findByNome(cursoNome);
+            List<Vaga> vagasDestinadas = new ArrayList<>();
+
+            for(Vaga vaga : vagas){
+                if(vaga.getCursos().contains(curso)){
+                    vagasDestinadas.add(vaga);
+                }
+            }
+            
+            return new ResponseEntity<List<Vaga>>(vagasDestinadas, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<List<Vaga>>(vagas, HttpStatus.OK);
     }
 
     

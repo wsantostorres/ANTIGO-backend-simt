@@ -14,7 +14,7 @@ public class Vaga {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(length = 100)
+    @Column(nullable = false, length = 100)
     private String titulo;
     @Column(length = 1000)
     private String descricao;
@@ -31,7 +31,7 @@ public class Vaga {
     @Column
     private LocalDate dataEncerramento;
     @Column
-    private int status;
+    private int status = 1;
 
     @ManyToMany(mappedBy = "vagas")
     private List<Curso> cursos;
