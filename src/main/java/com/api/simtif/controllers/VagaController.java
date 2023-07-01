@@ -170,10 +170,21 @@ public class VagaController {
         if(alunoOptional.isPresent() && vagaOptional.isPresent()){
             Aluno aluno = alunoOptional.get();
             Vaga vaga = vagaOptional.get();
+            String cursoAluno = aluno.getCurso();
+            Curso curso = cursoRepository.findByNome(cursoAluno);
+
+            if(!vaga.getCursos().contains(curso)){
+                return ResponseEntity.status(HttpStatus.OK).body("Você não pode participar desta vaga.");
+            }
+
+            if(aluno.getTipoVinculo() == null || aluno.getTipoVinculo().isEmpty()){
+                return ResponseEntity.status(HttpStatus.OK).body("Você não tem mais vinculo com a instituição.");
+            }
 
             if(vaga.getAlunos().contains(aluno)){
-                return ResponseEntity.status(HttpStatus.OK).body("Você já está participando desta vaga");
+                return ResponseEntity.status(HttpStatus.OK).body("Você já está participando desta vaga!");
             }
+
             
             aluno.getVagas().add(vaga);
             vaga.getAlunos().add(aluno);
@@ -181,7 +192,7 @@ public class VagaController {
             alunoRepository.save(aluno);
             vagaRepository.save(vaga);
 
-            return ResponseEntity.status(HttpStatus.OK).body("Participação realizada com sucesso.");
+            return ResponseEntity.status(HttpStatus.OK).body("Participação realizada com sucesso!");
         }
         
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocorreu um erro.");
