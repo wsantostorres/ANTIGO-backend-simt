@@ -22,21 +22,25 @@ public class Aluno {
     private String tipoVinculo;
     @Column(nullable=false)
     private String curso;
+    @Column
     private String email;
+    @Column
     private String numTelefone;
+    @Column
     private String cidade;
+    @Column
     private String uf;
-    @Column(length = 500)
+    @Column(length = 1000)
     private String objetivos;
-    @Column(length = 500)
+    @Column(length = 1000)
     private String experiencia;
-    @Column(length = 500)
+    @Column(length = 1000)
     private String projetos;
-    @Column(length = 500)
+    @Column(length = 1000)
     private String educacao;
-    @Column(length = 500)
+    @Column(length = 1000)
     private String habilidades;
-    @Column(length = 500)
+    @Column(length = 1000)
     private String cursosComplementares;
 
     @ManyToMany(cascade = CascadeType.ALL)
