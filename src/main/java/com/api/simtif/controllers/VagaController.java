@@ -26,7 +26,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/")
@@ -88,21 +87,9 @@ public class VagaController {
                 }
             }
         }
-
-        LocalDateTime dataHoraAtual = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String dataHoraFormatada = dataHoraAtual.format(formatter);
-
-        LocalDateTime dataPublicacao = LocalDateTime.parse(dataHoraFormatada, formatter);
         LocalDateTime dataEncerramento = vaga.getDataEncerramento();
 
-        if (dataPublicacao.isBefore(dataEncerramento)) {
-            vaga.setStatus(1);
-        }else{
-            vaga.setStatus(0);
-        }
-
-        vaga.setDataPublicacao(dataPublicacao);
+        vaga.setDataEncerramento(dataEncerramento);
         vaga.setCursos(cursosRelacionados);
         return ResponseEntity.status(HttpStatus.CREATED).body(vagaRepository.save(vaga));
 
@@ -145,20 +132,8 @@ public class VagaController {
         vaga.setDispManha(vagaAtualizada.getDispManha());
         vaga.setDispTarde(vagaAtualizada.getDispTarde());
         vaga.setDispNoite(vagaAtualizada.getDispNoite());
-
-        LocalDateTime dataHoraAtual = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String dataHoraFormatada = dataHoraAtual.format(formatter);
-
-        LocalDateTime dataPublicacao = LocalDateTime.parse(dataHoraFormatada, formatter);
-
-        if (dataPublicacao.isBefore(vaga.getDataEncerramento().withSecond(0).withNano(0))) {
-            vaga.setStatus(1);
-        } else {
-            vaga.setStatus(0);
-        }
-
-        vaga.setDataPublicacao(dataPublicacao);
+        LocalDateTime dataEncerramento = vaga.getDataEncerramento();
+        vaga.setDataEncerramento(dataEncerramento);
         vaga.setDataEncerramento(vagaAtualizada.getDataEncerramento());
 
         vagaRepository.save(vaga);

@@ -27,11 +27,9 @@ public class Vaga {
     @Column
     private int dispNoite;
     @Column
-    private LocalDateTime dataPublicacao;
-    @Column
     private LocalDateTime dataEncerramento;
     @Column
-    private int status = 1;
+    private int status;
 
     @ManyToMany(mappedBy = "vagas")
     private List<Curso> cursos;
