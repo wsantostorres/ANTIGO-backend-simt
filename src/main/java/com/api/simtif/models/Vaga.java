@@ -27,7 +27,7 @@ public class Vaga {
     @Column
     private int dispNoite;
     @Column
-    private LocalDateTime dataPublicacao;
+    private LocalDateTime dataUltimaModificacao;
     @Column
     private LocalDateTime dataEncerramento;
 

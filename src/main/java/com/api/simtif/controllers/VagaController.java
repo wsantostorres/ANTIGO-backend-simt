@@ -41,8 +41,8 @@ public class VagaController {
 
     @GetMapping("/vagas/")
     public List<Vaga> getAllVagas(@RequestParam(required = false) String cursoNome){
-        Sort sortByDataPublicacao = Sort.by(Sort.Direction.DESC, "dataPublicacao");
-        List <Vaga> vagas = vagaRepository.findAll(sortByDataPublicacao);;
+        Sort sortByDataUltimaModificacao = Sort.by(Sort.Direction.DESC, "dataUltimaModificacao");
+        List <Vaga> vagas = vagaRepository.findAll(sortByDataUltimaModificacao);;
         
 
         if(cursoNome != null && !cursoNome.isEmpty()){
@@ -87,11 +87,11 @@ public class VagaController {
                 }
             }
         }
-        LocalDateTime dataPublicacao = LocalDateTime.now();
+        LocalDateTime dataUltimaModificacao = LocalDateTime.now();
         LocalDateTime dataEncerramento = vaga.getDataEncerramento();
 
         vaga.setDataEncerramento(dataEncerramento);
-        vaga.setDataPublicacao(dataPublicacao);
+        vaga.setDataUltimaModificacao(dataUltimaModificacao);
         vaga.setCursos(cursosRelacionados);
         return ResponseEntity.status(HttpStatus.CREATED).body(vagaRepository.save(vaga));
 
@@ -134,8 +134,8 @@ public class VagaController {
         vaga.setDispManha(vagaAtualizada.getDispManha());
         vaga.setDispTarde(vagaAtualizada.getDispTarde());
         vaga.setDispNoite(vagaAtualizada.getDispNoite());
-        LocalDateTime dataPublicacao = LocalDateTime.now();
-        vaga.setDataPublicacao(dataPublicacao);
+        LocalDateTime dataUltimaModificacao = LocalDateTime.now();
+        vaga.setDataUltimaModificacao(dataUltimaModificacao);
         LocalDateTime dataEncerramento = vaga.getDataEncerramento();
         vaga.setDataEncerramento(dataEncerramento);
 
