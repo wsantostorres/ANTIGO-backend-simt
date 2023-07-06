@@ -134,7 +134,8 @@ public class VagaController {
         vaga.setDispManha(vagaAtualizada.getDispManha());
         vaga.setDispTarde(vagaAtualizada.getDispTarde());
         vaga.setDispNoite(vagaAtualizada.getDispNoite());
-        vaga.setDataPublicacao(vagaAtualizada.getDataPublicacao());
+        LocalDateTime dataPublicacao = LocalDateTime.now();
+        vaga.setDataPublicacao(dataPublicacao);
         LocalDateTime dataEncerramento = vaga.getDataEncerramento();
         vaga.setDataEncerramento(dataEncerramento);
 
