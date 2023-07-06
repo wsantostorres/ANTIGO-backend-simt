@@ -87,9 +87,11 @@ public class VagaController {
                 }
             }
         }
+        LocalDateTime dataPublicacao = LocalDateTime.now();
         LocalDateTime dataEncerramento = vaga.getDataEncerramento();
 
         vaga.setDataEncerramento(dataEncerramento);
+        vaga.setDataPublicacao(dataPublicacao);
         vaga.setCursos(cursosRelacionados);
         return ResponseEntity.status(HttpStatus.CREATED).body(vagaRepository.save(vaga));
 
@@ -132,9 +134,9 @@ public class VagaController {
         vaga.setDispManha(vagaAtualizada.getDispManha());
         vaga.setDispTarde(vagaAtualizada.getDispTarde());
         vaga.setDispNoite(vagaAtualizada.getDispNoite());
+        vaga.setDataPublicacao(vagaAtualizada.getDataPublicacao());
         LocalDateTime dataEncerramento = vaga.getDataEncerramento();
         vaga.setDataEncerramento(dataEncerramento);
-        vaga.setDataEncerramento(vagaAtualizada.getDataEncerramento());
 
         vagaRepository.save(vaga);
         return ResponseEntity.status(HttpStatus.OK).body("Vaga atualizada com sucesso.");
@@ -224,19 +226,6 @@ public class VagaController {
         }
 
         return new ResponseEntity<List<Vaga>>(vagas, HttpStatus.OK);
-    }
-
-    
-    @GetMapping(value = "buscarStatus")
-    @ResponseBody
-    public ResponseEntity<List<Vaga>> buscarPorStatus(@RequestParam(name = "status") int status) {
-        List<Vaga> vagas;
-        if (status == 0 || status == 1) {
-            vagas = vagaRepository.buscarStatus(status);
-            return new ResponseEntity<>(vagas, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 
     @PostMapping("/baixar-curriculos/{id}/")

@@ -16,7 +16,7 @@ public class Vaga {
     private long id;
     @Column(nullable = false, length = 100)
     private String titulo;
-    @Column(length = 5000)
+    @Column(length = 500)
     private String descricao;
     @Column
     private int tipo;
@@ -27,9 +27,9 @@ public class Vaga {
     @Column
     private int dispNoite;
     @Column
-    private LocalDateTime dataEncerramento;
+    private LocalDateTime dataPublicacao;
     @Column
-    private int status;
+    private LocalDateTime dataEncerramento;
 
     @ManyToMany(mappedBy = "vagas")
     private List<Curso> cursos;

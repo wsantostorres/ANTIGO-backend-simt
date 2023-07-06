@@ -14,7 +14,4 @@ public interface VagaRepository extends JpaRepository<Vaga, Long> {
     @Query(value = "select v from Vaga v where upper(trim(v.titulo)) like %?1%") // %?1% referece ao parametro titulo
     List<Vaga> buscarTitulo(String titulo);
 
-    @Query(value = "select v from Vaga v where v.status = ?1")
-    List<Vaga> buscarStatus(int status);
-
 }
