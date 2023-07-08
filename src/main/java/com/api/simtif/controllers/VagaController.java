@@ -9,23 +9,31 @@ import com.api.simtif.repositories.VagaRepository;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -38,6 +46,17 @@ public class VagaController {
 
     @Autowired
     AlunoRepository alunoRepository;
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
+                                .getAllErrors()
+                                .stream()
+                                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                                .collect(Collectors.toList());
+    
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
 
     @GetMapping("/vagas/")
     public List<Vaga> getAllVagas(@RequestParam(required = false) String cursoNome){
@@ -69,7 +88,15 @@ public class VagaController {
     }
 
     @PostMapping("/vagas/")
-    public ResponseEntity<Object> saveVaga(@RequestBody Vaga vaga) {
+    public ResponseEntity<Object> saveVaga(@Validated @RequestBody Vaga vaga, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+
         List<Curso> cursos = cursoRepository.findAll();
         List<Curso> vagaCursos = vaga.getCursos();
 
@@ -88,17 +115,24 @@ public class VagaController {
             }
         }
         LocalDateTime dataUltimaModificacao = LocalDateTime.now();
-        LocalDateTime dataEncerramento = vaga.getDataEncerramento();
+        LocalDate dataEncerramento = vaga.getDataEncerramento();
 
         vaga.setDataEncerramento(dataEncerramento);
         vaga.setDataUltimaModificacao(dataUltimaModificacao);
         vaga.setCursos(cursosRelacionados);
         return ResponseEntity.status(HttpStatus.CREATED).body(vagaRepository.save(vaga));
-
     }
 
     @PutMapping("/vagas/{id}")
-    public ResponseEntity<Object> updateVaga(@PathVariable Long id, @RequestBody Vaga vagaAtualizada) {
+    public ResponseEntity<Object> updateVaga(@PathVariable Long id, @Validated @RequestBody Vaga vagaAtualizada, BindingResult bindingResult) {
+
+    if (bindingResult.hasErrors()) {
+        Map<String, String> errors = new HashMap<>();
+        bindingResult.getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(errors);
+    }
+
     Optional<Vaga> optionalVaga = vagaRepository.findById(id);
 
     if (optionalVaga.isPresent()) {
@@ -136,7 +170,7 @@ public class VagaController {
         vaga.setDispNoite(vagaAtualizada.getDispNoite());
         LocalDateTime dataUltimaModificacao = LocalDateTime.now();
         vaga.setDataUltimaModificacao(dataUltimaModificacao);
-        LocalDateTime dataEncerramento = vaga.getDataEncerramento();
+        LocalDate dataEncerramento = vagaAtualizada.getDataEncerramento();
         vaga.setDataEncerramento(dataEncerramento);
 
         vagaRepository.save(vaga);
@@ -183,15 +217,15 @@ public class VagaController {
             Curso curso = cursoRepository.findByNome(cursoAluno);
 
             if(!vaga.getCursos().contains(curso)){
-                return ResponseEntity.status(HttpStatus.OK).body("Você não pode participar desta vaga.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode participar desta vaga.");
             }
 
             if(aluno.getTipoVinculo() == null || aluno.getTipoVinculo().isEmpty()){
-                return ResponseEntity.status(HttpStatus.OK).body("Você não tem mais vinculo com a instituição.");
+                return ResponseEntity.status(HttpStatus.GONE).body("Você não tem mais vinculo com a instituição.");
             }
 
             if(vaga.getAlunos().contains(aluno)){
-                return ResponseEntity.status(HttpStatus.OK).body("Você já está participando desta vaga!");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Você já está participando desta vaga!");
             }
 
             
