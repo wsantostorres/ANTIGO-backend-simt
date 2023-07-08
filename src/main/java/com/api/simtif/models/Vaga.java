@@ -31,7 +31,7 @@ public class Vaga {
     @NotBlank(message = "O título é obrigatório.")
     private String titulo;
 
-    @Column(length = 500)
+    @Column(nullable = false, length = 500)
     @NotBlank(message = "A descrição é obrigatória.")
     @Size(max = 500, message = "A descrição deve ter no máximo 500 caracteres.")
     private String descricao;
