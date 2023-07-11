@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.api.simtif.models.Administrador;
+import com.api.simtif.models.Servidor;
 import com.api.simtif.models.Aluno;
-import com.api.simtif.repositories.AdministradorRepository;
+import com.api.simtif.repositories.ServidorRepository;
 import com.api.simtif.repositories.AlunoRepository;
 
 
@@ -28,7 +28,7 @@ public class UserController {
     AlunoRepository alunoRepository;
 
     @Autowired
-    AdministradorRepository administradorRepository;
+    ServidorRepository servidorRepository;
 
     @GetMapping(value="/user/dados/{token}/")
     public ResponseEntity<Object> getDataByToken(@PathVariable String token) {
@@ -53,15 +53,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(alunoInfo);
         }
 
-        Optional<Administrador> administradorOptional = administradorRepository.findById(id);
-        if(administradorOptional.isPresent()){
-            Administrador administrador = administradorOptional.get();
+        Optional<Servidor> servidorOptional = servidorRepository.findById(id);
+        if(servidorOptional.isPresent()){
+            Servidor servidor = servidorOptional.get();
 
-            Map<String, Object> administradorInfo = new HashMap<>();
-            administradorInfo.put("id", administrador.getId());
-            administradorInfo.put("tipoVinculo", administrador.getTipoVinculo());
+            Map<String, Object> servidorInfo = new HashMap<>();
+            servidorInfo.put("id", servidor.getId());
+            servidorInfo.put("tipoVinculo", servidor.getTipoVinculo());
 
-            return ResponseEntity.status(HttpStatus.OK).body(administradorInfo);
+            return ResponseEntity.status(HttpStatus.OK).body(servidorInfo);
         }
         
 

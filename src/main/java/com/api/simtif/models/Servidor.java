@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "administradores")
+@Table(name = "servidores")
 @Getter @Setter
-public class Administrador {
+public class Servidor {
     @Id
     private Long id;
     @Column(nullable=false)
