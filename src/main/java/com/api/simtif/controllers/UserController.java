@@ -48,6 +48,7 @@ public class UserController {
             Map<String, Object> alunoInfo = new HashMap<>();
             alunoInfo.put("id", aluno.getId());
             alunoInfo.put("tipoVinculo", aluno.getTipoVinculo());
+            alunoInfo.put("nomeCompleto", aluno.getNomeCompleto());
             alunoInfo.put("curso", aluno.getCurso());
 
             return ResponseEntity.status(HttpStatus.OK).body(alunoInfo);
@@ -64,8 +65,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(servidorInfo);
         }
         
-
-        return ResponseEntity.status(HttpStatus.OK).body(id);
+        Map<String, Object> userId = new HashMap<>();
+        userId.put("id", id);
+        return ResponseEntity.status(HttpStatus.OK).body(userId);
 
     }
 
